@@ -2,8 +2,8 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  /*text-align: center;*/
+  /*color: #2c3e50;*/
 }
 /*
 #nav {
@@ -18,3 +18,11 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }*/
+
+.boxshadow {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 6px;
+}
+
+body {
+/*  background : #cccccc;*/
+}
