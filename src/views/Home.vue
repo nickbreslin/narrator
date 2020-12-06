@@ -4,15 +4,6 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 mt-5">
-          <!--
-          <div class="jumbotron">
-            <h1 class="display-3">Hello, Narrator.</h1>
-            <p class="lead">
-              This is a calculator to assist with lecture duration.
-            </p>
-          </div>
-          -->
-
           <div class="h1 border-bottom mb-5 ">Narrator</div>
 
           <div class="mb-5">
@@ -147,6 +138,69 @@
               </div>
             </div>
           </div>
+
+          <div class="mb-5">
+            <div class="h2 font-weight-bold">
+              Summary
+            </div>
+            <div class="card card-body boxshadow">
+              <p>
+                With a word count of
+                <span class="font-weight-bold text-primary border-bottom">{{
+                  getWordCount
+                }}</span>
+                and a speaking rate of
+                <span class="font-weight-bold text-primary border-bottom">{{
+                  getSpeakingRate
+                }}</span>
+              </p>
+              <!-- Textarea -->
+              <div class="copy-script-wrapper" v-if="this.activeWpm === 1">
+                <p>
+                  Press <b>Start Timer</b> and read the following sentence, then
+                  press <b>Stop Timer</b>:
+                </p>
+                <div class="alert alert-light">
+                  <p class="m-0">
+                    Modern readability tests are designed to indicate
+                    comprehension difficulty when reading a passage of
+                    contemporary academic English.
+                  </p>
+                </div>
+
+                <!-- Start Timer-->
+                <button
+                  v-bind:class="{
+                    'btn-secondary': isTimerRunning,
+                    'btn-success': !isTimerRunning
+                  }"
+                  @click="startTimer()"
+                  class="btn mr-3"
+                  :disabled="isTimerRunning"
+                >
+                  Start timer
+                </button>
+
+                <!-- Stop Timer -->
+                <button
+                  v-bind:class="{
+                    'btn-secondary': !isTimerRunning,
+                    'btn-danger': isTimerRunning
+                  }"
+                  @click="stopTimer()"
+                  class="btn"
+                  :disabled="!isTimerRunning"
+                >
+                  Stop timer
+                </button>
+                <div class="total mt-3 h3 pt-3 mb-0 border-top">
+                  Duration:
+                  <span class="badge badge-primary">{{ getDuration }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="footer border-top mb-5 pt-3">
             <p class="m-0">
               Narrator made by
