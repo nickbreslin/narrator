@@ -3,13 +3,15 @@
     <Header class="mb-3" />
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
+        <div class="col-lg-6 col-md-8 mt-5">
+          <!--
           <div class="jumbotron">
             <h1 class="display-3">Hello, Narrator.</h1>
             <p class="lead">
               This is a calculator to assist with lecture duration.
             </p>
           </div>
+          -->
 
           <div class="mb-5">
             <div class="h2">
@@ -43,7 +45,7 @@
               <!-- Word Count -->
               <div class="copy-script-wrapper" v-if="this.activeCount === 0">
                 <input
-                  class="form-control form-control-lg mb-3"
+                  class="form-control form-control-lg"
                   type="number"
                   v-model="wordCount"
                 />
@@ -53,7 +55,7 @@
               <div class="copy-script-wrapper" v-if="this.activeCount === 1">
                 <textarea class="form-control" rows="5" v-model="fullCopy" />
 
-                <div class="total mt-3 h3">
+                <div class="total mt-3 h3 mb-0">
                   Total word count:
                   <span class="badge badge-primary">{{ fullWordCount }}</span>
                 </div>
@@ -106,7 +108,7 @@
                   press <b>Stop Timer</b>:
                 </p>
                 <div class="alert alert-light">
-                  <p>
+                  <p class="m-0">
                     Modern readability tests are designed to indicate
                     comprehension difficulty when reading a passage of
                     contemporary academic English.
@@ -120,7 +122,7 @@
                     'btn-success': !isTimerRunning
                   }"
                   @click="startTimer()"
-                  class="btn"
+                  class="btn mr-3"
                   :disabled="isTimerRunning"
                 >
                   Start timer
@@ -133,14 +135,14 @@
                     'btn-danger': isTimerRunning
                   }"
                   @click="stopTimer()"
-                  class="btn ml-3"
+                  class="btn"
                   :disabled="!isTimerRunning"
                 >
                   Stop timer
                 </button>
-                <div class="total mt-3 h3">
-                  :
-                  <span class="badge badge-primary">{{ fullWordCount }}</span>
+                <div class="total mt-3 h3 pt-3 mb-0 border-top">
+                  Duration:
+                  <span class="badge badge-primary">{{ getDuration }}</span>
                 </div>
               </div>
             </div>
@@ -170,7 +172,10 @@ export default {
       activeWpm: 1,
       wpmType: 1,
       isTimerRunning: false,
-      timer: 0
+      timer: 0,
+      tsStart: 0,
+      tsEnd: 0,
+      duration: 0
     };
   },
   methods: {
@@ -183,9 +188,12 @@ export default {
     startTimer() {
       this.isTimerRunning = true;
       this.timer = 0;
+      this.tsStart = Math.round(new Date().getTime());
     },
     stopTimer() {
       this.isTimerRunning = false;
+      this.tsEnd = Math.round(new Date().getTime());
+      this.duration = this.tsEnd - this.tsStart;
     }
   },
   computed: {
@@ -194,12 +202,19 @@ export default {
         return 0;
       }
 
-      /*
-       * ! TODO hi.
-       */
       let words = this.fullCopy.split(" ");
       words = words.filter(e => e.trim().length);
       return words.length;
+    },
+    getDuration() {
+      if (!this.duration) {
+        return "n/a";
+      }
+
+      let newDur = this.duration / 1000;
+      newDur = newDur.toFixed(2);
+
+      return `${newDur} seconds`;
     }
   }
 };
