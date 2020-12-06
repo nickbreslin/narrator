@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Header class="mb-3" />
+    <Header class="mb-3 d-none" />
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 mt-5">
@@ -13,10 +13,11 @@
           </div>
           -->
 
+          <div class="h1 border-bottom mb-5 ">Narrator</div>
+
           <div class="mb-5">
-            <div class="h2">
-              <span class="badge badge-pill badge-primary">1</span> Script
-              length
+            <div class="h2 font-weight-bold">
+              Script length
             </div>
             <div class="card card-body boxshadow">
               <div
@@ -64,9 +65,8 @@
           </div>
 
           <div class="mb-5">
-            <div class="h2">
-              <span class="badge badge-pill badge-primary">2</span> Speaking
-              rate
+            <div class="h2 font-weight-bold">
+              Speaking rate
             </div>
             <div class="card card-body boxshadow">
               <div
@@ -146,6 +146,17 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="footer border-top mb-5 pt-3">
+            <p class="m-0">
+              Narrator made by
+              <a href="https://www.nickbreslin.com">Nick Breslin</a>.
+            </p>
+            <p class="m-0">
+              Proudly built with
+              <a href="https://https://vuejs.org/">Vue</a> and
+              <a href="https://getbootstrap.com/">Bootstrap</a>.
+            </p>
           </div>
         </div>
       </div>
