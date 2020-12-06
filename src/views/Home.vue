@@ -86,9 +86,9 @@
               <!-- Word Count -->
               <div class="copy-script-wrapper" v-if="this.activeWpm === 0">
                 <select class="form-control" v-model="wpmType">
-                  <option value="0">110 WPM (Slow)</option>
-                  <option value="1">130 WPM (Average)</option>
-                  <option value="2">150 WPM (Fast)</option>
+                  <option value="110">110 WPM (Slow)</option>
+                  <option value="130">130 WPM (Average)</option>
+                  <option value="150">150 WPM (Fast)</option>
                 </select>
               </div>
 
@@ -144,7 +144,7 @@
               Summary
             </div>
             <div class="card card-body boxshadow">
-              <p>
+              <p class="mb-0">
                 With a word count of
                 <span class="font-weight-bold text-primary border-bottom">{{
                   getWordCount
@@ -153,51 +153,12 @@
                 <span class="font-weight-bold text-primary border-bottom">{{
                   getSpeakingRate
                 }}</span>
+                words per minute,this script is estimated to take
+                <span class="font-weight-bold text-primary border-bottom">{{
+                  getSpeakingRate
+                }}</span
+                >.
               </p>
-              <!-- Textarea -->
-              <div class="copy-script-wrapper" v-if="this.activeWpm === 1">
-                <p>
-                  Press <b>Start Timer</b> and read the following sentence, then
-                  press <b>Stop Timer</b>:
-                </p>
-                <div class="alert alert-light">
-                  <p class="m-0">
-                    Modern readability tests are designed to indicate
-                    comprehension difficulty when reading a passage of
-                    contemporary academic English.
-                  </p>
-                </div>
-
-                <!-- Start Timer-->
-                <button
-                  v-bind:class="{
-                    'btn-secondary': isTimerRunning,
-                    'btn-success': !isTimerRunning
-                  }"
-                  @click="startTimer()"
-                  class="btn mr-3"
-                  :disabled="isTimerRunning"
-                >
-                  Start timer
-                </button>
-
-                <!-- Stop Timer -->
-                <button
-                  v-bind:class="{
-                    'btn-secondary': !isTimerRunning,
-                    'btn-danger': isTimerRunning
-                  }"
-                  @click="stopTimer()"
-                  class="btn"
-                  :disabled="!isTimerRunning"
-                >
-                  Stop timer
-                </button>
-                <div class="total mt-3 h3 pt-3 mb-0 border-top">
-                  Duration:
-                  <span class="badge badge-primary">{{ getDuration }}</span>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -235,7 +196,7 @@ export default {
       fullCopy: "",
       activeCount: 0,
       activeWpm: 1,
-      wpmType: 1,
+      wpmType: 130,
       isTimerRunning: false,
       timer: 0,
       tsStart: 0,
@@ -280,6 +241,20 @@ export default {
       newDur = newDur.toFixed(2);
 
       return `${newDur} seconds`;
+    },
+    getWordCount() {
+      if (!this.activeCount) {
+        return this.wordCount;
+      }
+
+      return this.fullWordCount;
+    },
+    getSpeakingRate() {
+      if (!this.activeWpm) {
+        return this.wmpType;
+      }
+
+      return this.duration;
     }
   }
 };
