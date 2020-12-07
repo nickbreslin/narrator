@@ -131,9 +131,17 @@
                 >
                   Stop timer
                 </button>
-                <div class="total mt-3 h3 pt-3 mb-0 border-top">
+
+                <span class="float-right">
                   Duration:
                   <span class="badge badge-primary">{{ getDuration }}</span>
+                </span>
+
+                <div class="total mt-3 h4 pt-3 mb-0 border-top">
+                  Words per minute:
+                  <span class="badge badge-primary">{{
+                    getWpm ? getWpm : `n/a`
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -144,7 +152,7 @@
               Summary
             </div>
             <div class="card card-body boxshadow">
-              <p class="mb-0">
+              <p v-if="getResults" class="mb-0">
                 With a word count of
                 <span class="font-weight-bold text-primary border-bottom">{{
                   getWordCount
@@ -153,11 +161,14 @@
                 <span class="font-weight-bold text-primary border-bottom">{{
                   getSpeakingRate
                 }}</span>
-                words per minute,this script is estimated to take
+                words per minute, this narration is estimated to take
                 <span class="font-weight-bold text-primary border-bottom">{{
-                  getSpeakingRate
+                  getResults
                 }}</span
                 >.
+              </p>
+              <p v-else class="mb-0">
+                Fill out the details above to get the summary.
               </p>
             </div>
           </div>
@@ -195,7 +206,7 @@ export default {
       wordCount: 0,
       fullCopy: "",
       activeCount: 0,
-      activeWpm: 1,
+      activeWpm: 0,
       wpmType: 130,
       isTimerRunning: false,
       timer: 0,
@@ -214,6 +225,7 @@ export default {
     startTimer() {
       this.isTimerRunning = true;
       this.timer = 0;
+      this.duration = 0;
       this.tsStart = Math.round(new Date().getTime());
     },
     stopTimer() {
@@ -251,10 +263,20 @@ export default {
     },
     getSpeakingRate() {
       if (!this.activeWpm) {
-        return this.wmpType;
+        return this.wpmType;
       }
 
-      return this.duration;
+      return this.duration / 1000;
+    },
+    getWpm() {
+      if (!this.getWordCount || !this.getSpeakingRate) {
+        return 0;
+      }
+
+      let m = 60 / this.getSpeakingRate; // Multiplier.
+      let wpm = 14 * m;
+      wpm = Math.round(wpm);
+      return wpm;
     }
   }
 };
