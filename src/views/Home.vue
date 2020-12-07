@@ -152,7 +152,7 @@
               Summary
             </div>
             <div class="card card-body boxshadow">
-              <p v-if="getResults" class="mb-0">
+              <p v-if="getSummary" class="mb-0">
                 With a word count of
                 <span class="font-weight-bold text-primary border-bottom">{{
                   getWordCount
@@ -163,7 +163,7 @@
                 }}</span>
                 words per minute, this narration is estimated to take
                 <span class="font-weight-bold text-primary border-bottom">{{
-                  getResults
+                  getSummary
                 }}</span
                 >.
               </p>
@@ -256,17 +256,20 @@ export default {
     },
     getWordCount() {
       if (!this.activeCount) {
-        return this.wordCount;
+        return parseInt(this.wordCount);
       }
 
-      return this.fullWordCount;
+      return parseInt(this.fullWordCount);
     },
     getSpeakingRate() {
       if (!this.activeWpm) {
         return this.wpmType;
       }
 
-      return this.duration / 1000;
+      let dur = this.duration / 1000;
+      dur = dur.toFixed(2);
+
+      return dur;
     },
     getWpm() {
       if (!this.getWordCount || !this.getSpeakingRate) {
@@ -277,6 +280,15 @@ export default {
       let wpm = 14 * m;
       wpm = Math.round(wpm);
       return wpm;
+    },
+    getSummary() {
+      if (!this.getWpm) {
+        return 0;
+      }
+
+      let length = this.getWordCount / this.getWpm;
+      length = Math.round(length);
+      return length;
     }
   }
 };
