@@ -1,5 +1,14 @@
 # narrator
 
+
+## Dependencies
+
+`
+https://bootswatch.com/lumen/
+`
+
+----
+
 ## Project setup
 ```
 npm install
