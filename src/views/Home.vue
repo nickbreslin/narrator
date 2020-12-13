@@ -4,174 +4,181 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 mt-5">
-          <div class="h1 border-bottom mb-5 ">Narrator</div>
-
-          <div class="mb-5">
-            <div class="h2 font-weight-bold">
-              Script length
-            </div>
-            <div class="card card-body boxshadow">
-              <div class="btn-group mb-3" role="group">
-                <button
-                  type="button"
-                  v-bind:class="{ active: this.btnGroups.words === 0 }"
-                  @click="setActiveCount(0)"
-                  class="btn btn-secondary"
-                >
-                  Word Count
-                </button>
-                <button
-                  type="button"
-                  v-bind:class="{ active: this.btnGroups.words === 1 }"
-                  @click="setActiveCount(1)"
-                  class="btn btn-secondary"
-                >
-                  Script
-                </button>
+          <div class="h1 border-bottom">Narrator</div>
+          <div class="card card-body bg-secondary">
+            <div class="mb-5">
+              <div class="h3 font-weight-bold">
+                Script length
               </div>
+              <div class="card card-body boxshadow">
+                <div class="btn-group mb-3" role="group">
+                  <button
+                    type="button"
+                    v-bind:class="{ active: this.btnGroups.words === 0 }"
+                    @click="setActiveCount(0)"
+                    class="btn btn-secondary"
+                  >
+                    Word Count
+                  </button>
+                  <button
+                    type="button"
+                    v-bind:class="{ active: this.btnGroups.words === 1 }"
+                    @click="setActiveCount(1)"
+                    class="btn btn-secondary"
+                  >
+                    Script
+                  </button>
+                </div>
 
-              <!-- Word Count -->
-              <div
-                class="copy-script-wrapper"
-                v-if="this.btnGroups.words === 0"
-              >
-                <input
-                  class="form-control form-control-lg"
-                  type="number"
-                  v-model="this.script.words"
-                />
-              </div>
+                <!-- Word Count -->
+                <div
+                  class="copy-script-wrapper"
+                  v-if="this.btnGroups.words === 0"
+                >
+                  <input
+                    class="form-control form-control-lg"
+                    type="number"
+                    v-model="this.script.words"
+                  />
+                </div>
 
-              <!-- Textarea -->
-              <div
-                class="copy-script-wrapper"
-                v-if="this.btnGroups.words === 1"
-              >
-                <textarea class="form-control" rows="5" v-model="fullCopy" />
+                <!-- Textarea -->
+                <div
+                  class="copy-script-wrapper"
+                  v-if="this.btnGroups.words === 1"
+                >
+                  <textarea class="form-control" rows="5" v-model="fullCopy" />
 
-                <div class="total mt-3 h3 mb-0">
-                  Total word count:
-                  <span class="badge badge-primary">{{ copyWordCount }}</span>
+                  <div class="total mt-3 h3 mb-0">
+                    Total word count:
+                    <span class="badge badge-primary">{{ copyWordCount }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="mb-5">
-            <div class="h2 font-weight-bold">
-              Speaking rate
-            </div>
-            <div class="card card-body boxshadow">
-              <div class="btn-group mb-3" role="group">
-                <button
-                  type="button"
-                  v-bind:class="{ active: this.btnGroups.rate === 0 }"
-                  @click="setActiveWpm(0)"
-                  class="btn btn-secondary"
-                >
-                  Standard
-                </button>
-                <button
-                  type="button"
-                  v-bind:class="{ active: this.btnGroups.rate === 1 }"
-                  @click="setActiveWpm(1)"
-                  class="btn btn-secondary"
-                >
-                  Personalized
-                </button>
+            <div class="mb-5">
+              <div class="h3 font-weight-bold">
+                Speaking rate
               </div>
+              <div class="card card-body boxshadow">
+                <div class="btn-group mb-3" role="group">
+                  <button
+                    type="button"
+                    v-bind:class="{ active: this.btnGroups.rate === 0 }"
+                    @click="setActiveWpm(0)"
+                    class="btn btn-secondary"
+                  >
+                    Standard
+                  </button>
+                  <button
+                    type="button"
+                    v-bind:class="{ active: this.btnGroups.rate === 1 }"
+                    @click="setActiveWpm(1)"
+                    class="btn btn-secondary"
+                  >
+                    Personalized
+                  </button>
+                </div>
 
-              <!-- Word Count -->
-              <span>Words per minute:</span>
-              <div class="copy-script-wrapper" v-if="this.btnGroups.rate === 0">
-                <select class="form-control" v-model="ratePicker">
-                  <option value="110">110 WPM (Slow)</option>
-                  <option value="130">130 WPM (Average)</option>
-                  <option value="150">150 WPM (Fast)</option>
-                </select>
-              </div>
+                <!-- Word Count -->
+                <span>Words per minute:</span>
+                <div
+                  class="copy-script-wrapper"
+                  v-if="this.btnGroups.rate === 0"
+                >
+                  <select class="form-control" v-model="ratePicker">
+                    <option value="110">110 WPM (Slow)</option>
+                    <option value="130">130 WPM (Average)</option>
+                    <option value="150">150 WPM (Fast)</option>
+                  </select>
+                </div>
 
-              <!-- Textarea -->
-              <div class="copy-script-wrapper" v-if="this.btnGroups.rate === 1">
-                <p>
-                  Press <b>Start Timer</b> and read the following sentence, then
-                  press <b>Stop Timer</b>:
-                </p>
-                <div class="alert alert-light">
-                  <p class="m-0">
-                    Modern readability tests are designed to indicate
-                    comprehension difficulty when reading a passage of
-                    contemporary academic English.
+                <!-- Textarea -->
+                <div
+                  class="copy-script-wrapper"
+                  v-if="this.btnGroups.rate === 1"
+                >
+                  <p>
+                    Press <b>Start Timer</b> and read the following sentence,
+                    then press <b>Stop Timer</b>:
                   </p>
-                </div>
+                  <div class="alert alert-light">
+                    <p class="m-0">
+                      Modern readability tests are designed to indicate
+                      comprehension difficulty when reading a passage of
+                      contemporary academic English.
+                    </p>
+                  </div>
 
-                <!-- Start Timer-->
-                <button
-                  v-bind:class="{
-                    'btn-secondary': isTimerRunning,
-                    'btn-success': !isTimerRunning
-                  }"
-                  @click="startTimer()"
-                  class="btn mr-3"
-                  :disabled="isTimerRunning"
-                >
-                  Start timer
-                </button>
+                  <!-- Start Timer-->
+                  <button
+                    v-bind:class="{
+                      'btn-secondary': isTimerRunning,
+                      'btn-success': !isTimerRunning
+                    }"
+                    @click="startTimer()"
+                    class="btn mr-3"
+                    :disabled="isTimerRunning"
+                  >
+                    Start timer
+                  </button>
 
-                <!-- Stop Timer -->
-                <button
-                  v-bind:class="{
-                    'btn-secondary': !isTimerRunning,
-                    'btn-danger': isTimerRunning
-                  }"
-                  @click="stopTimer()"
-                  class="btn"
-                  :disabled="!isTimerRunning"
-                >
-                  Stop timer
-                </button>
+                  <!-- Stop Timer -->
+                  <button
+                    v-bind:class="{
+                      'btn-secondary': !isTimerRunning,
+                      'btn-danger': isTimerRunning
+                    }"
+                    @click="stopTimer()"
+                    class="btn"
+                    :disabled="!isTimerRunning"
+                  >
+                    Stop timer
+                  </button>
 
-                <span class="float-right">
-                  Duration:
-                  <span class="badge badge-primary">{{ getDuration }}</span>
-                </span>
+                  <span class="float-right">
+                    Duration:
+                    <span class="badge badge-primary">{{ getDuration }}</span>
+                  </span>
 
-                <div class="total mt-3 h4 pt-3 mb-0 border-top">
-                  Words per minute:
-                  <span class="badge badge-primary">{{
-                    getWpm ? getWpm : `n/a`
-                  }}</span>
+                  <div class="total mt-3 h4 pt-3 mb-0 border-top">
+                    Words per minute:
+                    <span class="badge badge-primary">{{
+                      getWpm ? getWpm : `n/a`
+                    }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="mb-5">
-            <div class="h2 font-weight-bold">
-              Summary
-            </div>
-            <div class="card card-body boxshadow">
-              <p v-if="getSummary" class="mb-0">
-                With a word count of
-                <span class="font-weight-bold text-primary border-bottom">{{
-                  getWordCount
-                }}</span>
-                and a speaking rate of
-                <span class="font-weight-bold text-primary border-bottom">{{
-                  getSpeakingRate
-                }}</span>
-                words per minute, this narration is estimated to take
-                <span class="font-weight-bold text-primary border-bottom">{{
-                  getSummary2
-                }}</span
-                >.
-              </p>
-              <p v-else class="mb-0">
-                Fill out the details above to get the summary.
-              </p>
+            <div class="">
+              <div class="h3 font-weight-bold">
+                Summary
+              </div>
+              <div class="card card-body boxshadow">
+                <p v-if="getSummary" class="mb-0">
+                  With a word count of
+                  <span class="font-weight-bold text-primary border-bottom">{{
+                    getWordCount
+                  }}</span>
+                  and a speaking rate of
+                  <span class="font-weight-bold text-primary border-bottom">{{
+                    getSpeakingRate
+                  }}</span>
+                  words per minute, this narration is estimated to take
+                  <span class="font-weight-bold text-primary border-bottom">{{
+                    getSummary2
+                  }}</span
+                  >.
+                </p>
+                <p v-else class="mb-0">
+                  Fill out the details above to get the summary.
+                </p>
+              </div>
             </div>
           </div>
-
+          <!-- card -->
           <div class="footer border-top mb-5 pt-3">
             <p class="m-0">
               Narrator made by
