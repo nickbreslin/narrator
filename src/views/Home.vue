@@ -11,14 +11,10 @@
               Script length
             </div>
             <div class="card card-body boxshadow">
-              <div
-                class="btn-group mb-3"
-                role="group"
-                aria-label="Basic example"
-              >
+              <div class="btn-group mb-3" role="group">
                 <button
                   type="button"
-                  v-bind:class="{ active: this.activeCount === 0 }"
+                  v-bind:class="{ active: this.btnGroups.words === 0 }"
                   @click="setActiveCount(0)"
                   class="btn btn-secondary"
                 >
@@ -26,7 +22,7 @@
                 </button>
                 <button
                   type="button"
-                  v-bind:class="{ active: this.activeCount === 1 }"
+                  v-bind:class="{ active: this.btnGroups.words === 1 }"
                   @click="setActiveCount(1)"
                   class="btn btn-secondary"
                 >
@@ -35,21 +31,27 @@
               </div>
 
               <!-- Word Count -->
-              <div class="copy-script-wrapper" v-if="this.activeCount === 0">
+              <div
+                class="copy-script-wrapper"
+                v-if="this.btnGroups.words === 0"
+              >
                 <input
                   class="form-control form-control-lg"
                   type="number"
-                  v-model="wordCount"
+                  v-model="this.script.words"
                 />
               </div>
 
               <!-- Textarea -->
-              <div class="copy-script-wrapper" v-if="this.activeCount === 1">
+              <div
+                class="copy-script-wrapper"
+                v-if="this.btnGroups.words === 1"
+              >
                 <textarea class="form-control" rows="5" v-model="fullCopy" />
 
                 <div class="total mt-3 h3 mb-0">
                   Total word count:
-                  <span class="badge badge-primary">{{ fullWordCount }}</span>
+                  <span class="badge badge-primary">{{ copyWordCount }}</span>
                 </div>
               </div>
             </div>
@@ -60,14 +62,10 @@
               Speaking rate
             </div>
             <div class="card card-body boxshadow">
-              <div
-                class="btn-group mb-3"
-                role="group"
-                aria-label="Basic example"
-              >
+              <div class="btn-group mb-3" role="group">
                 <button
                   type="button"
-                  v-bind:class="{ active: this.activeWpm === 0 }"
+                  v-bind:class="{ active: this.btnGroups.rate === 0 }"
                   @click="setActiveWpm(0)"
                   class="btn btn-secondary"
                 >
@@ -75,7 +73,7 @@
                 </button>
                 <button
                   type="button"
-                  v-bind:class="{ active: this.activeWpm === 1 }"
+                  v-bind:class="{ active: this.btnGroups.rate === 1 }"
                   @click="setActiveWpm(1)"
                   class="btn btn-secondary"
                 >
@@ -84,8 +82,9 @@
               </div>
 
               <!-- Word Count -->
-              <div class="copy-script-wrapper" v-if="this.activeWpm === 0">
-                <select class="form-control" v-model="wpmType">
+              <span>Words per minute:</span>
+              <div class="copy-script-wrapper" v-if="this.btnGroups.rate === 0">
+                <select class="form-control" v-model="ratePicker">
                   <option value="110">110 WPM (Slow)</option>
                   <option value="130">130 WPM (Average)</option>
                   <option value="150">150 WPM (Fast)</option>
@@ -93,7 +92,7 @@
               </div>
 
               <!-- Textarea -->
-              <div class="copy-script-wrapper" v-if="this.activeWpm === 1">
+              <div class="copy-script-wrapper" v-if="this.btnGroups.rate === 1">
                 <p>
                   Press <b>Start Timer</b> and read the following sentence, then
                   press <b>Stop Timer</b>:
@@ -203,49 +202,54 @@ export default {
   },
   data() {
     return {
-      wordCount: 0,
-      fullCopy: "",
-      activeCount: 0,
-      activeWpm: 0,
-      wpmType: 130,
-      isTimerRunning: false,
-      timer: 0,
-      tsStart: 0,
-      tsEnd: 0,
-      duration: 0
+      btnGroups: {
+        words: 0,
+        rate: 0
+      },
+      ratePicker: 130,
+      timer: {
+        start: 0,
+        end: 0,
+        duration: 0, // In milliseconds
+        isRunning: false
+      },
+      script: {
+        words: 0,
+        copy: ""
+      },
+      wpmType: 130
     };
   },
   methods: {
     setActiveCount(id) {
-      this.activeCount = id;
+      this.btnGroups.words = id;
     },
     setActiveWpm(id) {
-      this.activeWpm = id;
+      this.btnGroups.rate = id;
     },
     startTimer() {
-      this.isTimerRunning = true;
-      this.timer = 0;
-      this.duration = 0;
-      this.tsStart = Math.round(new Date().getTime());
+      this.timer.isRunning = true;
+      this.timer.start = Math.round(new Date().getTime());
+      this.timer.duration = 0;
     },
     stopTimer() {
-      this.isTimerRunning = false;
-      this.tsEnd = Math.round(new Date().getTime());
-      this.duration = this.tsEnd - this.tsStart;
+      this.timer.isRunning = false;
+      this.timer.end = Math.round(new Date().getTime());
+      this.timer.duration = this.timer.end - this.timer.start;
     }
   },
   computed: {
-    fullWordCount() {
-      if (this.fullCopy.length === 0) {
+    scriptWordCount() {
+      if (this.script.copy.length === 0) {
         return 0;
       }
 
-      let words = this.fullCopy.split(" ");
+      let words = this.script.copy.split(" ");
       words = words.filter(e => e.trim().length);
       return words.length;
     },
     getDuration() {
-      if (!this.duration) {
+      if (!this.timer.duration) {
         return "n/a";
       }
 
@@ -255,25 +259,28 @@ export default {
       return `${newDur} seconds`;
     },
     getWordCount() {
-      if (!this.activeCount) {
-        return parseInt(this.wordCount);
+      if (this.btnGroups.words === 0) {
+        // Script Length - Word Count
+        return parseInt(this.script.words);
       }
 
-      return parseInt(this.fullWordCount);
+      return this.scriptWordCount;
     },
     getSpeakingRate() {
-      if (!this.activeWpm) {
-        return this.wpmType;
+      if (!this.btnGroups.rate === 0) {
+        // Speaking rate - Standard
+        return this.ratePicker;
       }
 
+      // Any recording?
       if (!this.duration) {
         return 0;
       }
 
-      let dur = this.duration / 1000;
-      dur = dur.toFixed(2);
+      let duration = this.duration / 1000; // convert from milliseconds to seconds
+      duration = duration.toFixed(2);
 
-      return dur;
+      return duration;
     },
     getWpm() {
       if (!this.getWordCount || !this.getSpeakingRate) {
