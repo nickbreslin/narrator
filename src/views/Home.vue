@@ -152,7 +152,7 @@
                   <div class="total mt-3 h4 pt-3 mb-0 border-top">
                     Words per minute:
                     <span class="badge badge-primary">{{
-                      getWpm ? getWpm : `n/a`
+                      getSpeakingRate ? getSpeakingRate : `n/a`
                     }}</span>
                   </div>
                 </div>
@@ -164,7 +164,7 @@
                 Summary
               </div>
               <div class="card card-body boxshadow">
-                <p v-if="getSummary" class="mb-0">
+                <p v-if="getRawSeconds" class="mb-0">
                   With a word count of
                   <span class="font-weight-bold text-primary border-bottom">{{
                     getWordCount
@@ -175,9 +175,13 @@
                   }}</span>
                   words per minute, this narration is estimated to take
                   <span class="font-weight-bold text-primary border-bottom">{{
-                    getSummary2
-                  }}</span
-                  >.
+                    getCalculatedMinutes
+                  }}</span>
+                  minutes
+                  <span class="font-weight-bold text-primary border-bottom">{{
+                    getCalculatedSeconds
+                  }}</span>
+                  seconds.
                 </p>
                 <p v-else class="mb-0">
                   Fill out the details above to get the summary.
@@ -273,7 +277,7 @@ export default {
         return "n/a";
       }
 
-      let duration = this.convertDuration();
+      let duration = this.convertDuration(this.timer.duration);
 
       return `${duration} seconds`;
     },
@@ -286,7 +290,7 @@ export default {
       return this.scriptWordCount;
     },
     getSpeakingRate() {
-      if (!this.btnGroups.rate === 0) {
+      if (this.btnGroups.rate === 0) {
         // Speaking rate - Standard
         return this.ratePicker;
       }
@@ -296,25 +300,30 @@ export default {
         return 0;
       }
 
-      let duration = this.convertDuration();
+      let duration = this.convertDuration(this.timer.duration);
+      duration = (60 / duration) * 14;
+      duration = Math.round(duration);
       return duration;
     },
-    getWpm() {
-      if (!this.getWordCount || !this.getSpeakingRate) {
-        return 0;
-      }
+    getCalculatedSeconds() {
+      let seconds = this.getRawSeconds;
 
-      let m = 60 / this.getSpeakingRate; // Multiplier.
-      let wpm = 14 * m;
-      wpm = Math.round(wpm);
-      return wpm;
+      seconds = seconds % 60;
+      return seconds;
     },
-    getSummary() {
-      if (!this.getWpm) {
+    getCalculatedMinutes() {
+      let seconds = this.getRawSeconds;
+
+      let minutes = seconds / 60;
+      minutes = Math.floor(minutes);
+      return minutes;
+    },
+    getRawSeconds() {
+      if (!this.getSpeakingRate) {
         return 0;
       }
 
-      let length = this.getWordCount / this.getWpm;
+      let length = (this.getWordCount / this.getSpeakingRate) * 60;
       length = Math.round(length);
       return length;
     }
