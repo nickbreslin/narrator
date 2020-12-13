@@ -163,7 +163,7 @@
                 }}</span>
                 words per minute, this narration is estimated to take
                 <span class="font-weight-bold text-primary border-bottom">{{
-                  getSummary
+                  getSummary2
                 }}</span
                 >.
               </p>
@@ -264,6 +264,10 @@ export default {
     getSpeakingRate() {
       if (!this.activeWpm) {
         return this.wpmType;
+      }
+
+      if (!this.duration) {
+        return 0;
       }
 
       let dur = this.duration / 1000;
