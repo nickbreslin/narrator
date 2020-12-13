@@ -4,7 +4,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 mt-5">
-          <div class="h1 border-bottom">Narrator</div>
+          <div class="h1">Narrator</div>
           <div class="card card-body bg-secondary">
             <div class="mb-5">
               <div class="h3 font-weight-bold">
@@ -47,11 +47,17 @@
                   class="copy-script-wrapper"
                   v-if="this.btnGroups.words === 1"
                 >
-                  <textarea class="form-control" rows="5" v-model="fullCopy" />
+                  <textarea
+                    class="form-control"
+                    rows="5"
+                    v-model="script.copy"
+                  />
 
-                  <div class="total mt-3 h3 mb-0">
+                  <div class="total mt-3 h4 mb-0">
                     Total word count:
-                    <span class="badge badge-primary">{{ copyWordCount }}</span>
+                    <span class="badge badge-primary">{{
+                      scriptWordCount
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -82,11 +88,12 @@
                 </div>
 
                 <!-- Word Count -->
-                <span>Words per minute:</span>
+
                 <div
                   class="copy-script-wrapper"
                   v-if="this.btnGroups.rate === 0"
                 >
+                  <span>Words per minute:</span>
                   <select class="form-control" v-model="ratePicker">
                     <option value="110">110 WPM (Slow)</option>
                     <option value="130">130 WPM (Average)</option>
@@ -114,12 +121,12 @@
                   <!-- Start Timer-->
                   <button
                     v-bind:class="{
-                      'btn-secondary': isTimerRunning,
-                      'btn-success': !isTimerRunning
+                      'btn-secondary': timer.isRunning,
+                      'btn-success': !timer.isRunning
                     }"
                     @click="startTimer()"
                     class="btn mr-3"
-                    :disabled="isTimerRunning"
+                    :disabled="timer.isRunning"
                   >
                     Start timer
                   </button>
@@ -127,12 +134,12 @@
                   <!-- Stop Timer -->
                   <button
                     v-bind:class="{
-                      'btn-secondary': !isTimerRunning,
-                      'btn-danger': isTimerRunning
+                      'btn-secondary': !timer.isRunning,
+                      'btn-danger': timer.isRunning
                     }"
                     @click="stopTimer()"
                     class="btn"
-                    :disabled="!isTimerRunning"
+                    :disabled="!timer.isRunning"
                   >
                     Stop timer
                   </button>
@@ -243,6 +250,12 @@ export default {
       this.timer.isRunning = false;
       this.timer.end = Math.round(new Date().getTime());
       this.timer.duration = this.timer.end - this.timer.start;
+    },
+    convertDuration(mts) {
+      let duration = mts / 1000; // convert from milliseconds to seconds
+      duration = duration.toFixed(2);
+
+      return duration;
     }
   },
   computed: {
@@ -260,10 +273,9 @@ export default {
         return "n/a";
       }
 
-      let newDur = this.duration / 1000;
-      newDur = newDur.toFixed(2);
+      let duration = this.convertDuration();
 
-      return `${newDur} seconds`;
+      return `${duration} seconds`;
     },
     getWordCount() {
       if (this.btnGroups.words === 0) {
@@ -280,13 +292,11 @@ export default {
       }
 
       // Any recording?
-      if (!this.duration) {
+      if (!this.timer.duration) {
         return 0;
       }
 
-      let duration = this.duration / 1000; // convert from milliseconds to seconds
-      duration = duration.toFixed(2);
-
+      let duration = this.convertDuration();
       return duration;
     },
     getWpm() {
