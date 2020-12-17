@@ -1,4 +1,8 @@
-# narrator
+# Narrator
+
+Narration length calculator
+
+www.nickbreslin/narrator/
 
 
 ## Dependencies
